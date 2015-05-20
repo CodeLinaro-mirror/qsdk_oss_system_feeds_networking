@@ -1,0 +1,25 @@
+#!/bin/sh
+
+. /lib/functions.sh
+. /lib/functions/network.sh
+
+plutoid=$(cat /var/run/pluto/pluto.pid)
+
+[ -z "$plutoid" ] && return
+
+proto=$(uci_get ipsec setup protostack)
+
+[ $proto != "klips" ] && return
+
+ifaces=$(uci_get ipsec setup interfaces)
+
+
+network_get_device ifname $INTERFACE
+
+attach_device(){
+	for iface in $ifaces; do
+	        phyif=$(echo $iface |cut -d"=" -f 2)
+	        [ $ifname = $phyif ] && /etc/init.d/ipsec restart
+	done
+}
+[ "$ACTION" = "ifup" ] && attach_device

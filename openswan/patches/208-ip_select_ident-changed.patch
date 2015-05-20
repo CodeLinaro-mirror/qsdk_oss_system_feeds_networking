@@ -1,0 +1,12 @@
+diff -Nur a/linux/include/openswan/ipsec_param2.h b/linux/include/openswan/ipsec_param2.h
+--- a/linux/include/openswan/ipsec_param2.h	2015-04-02 09:32:16.491102114 -0700
++++ b/linux/include/openswan/ipsec_param2.h	2015-04-02 09:38:10.967111040 -0700
+@@ -27,7 +27,7 @@
+ 
+ /* kernels > 2.4.102 */
+ #if defined(IP_SELECT_IDENT) && defined(IP_SELECT_IDENT_NEW2)
+-#define KLIPS_IP_SELECT_IDENT(iph, skb) ip_select_ident(skb, NULL)
++#define KLIPS_IP_SELECT_IDENT(iph, skb) __ip_select_ident(skb, 1)
+ #endif
+ 
+ #if !defined(HAVE_CURRENT_UID)
