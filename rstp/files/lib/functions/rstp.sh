@@ -12,6 +12,9 @@ get_atheros_header_type(){
 }
 
 get_cpu_mirror_port(){
+if [ -e /proc/sys/net/edma/enable_stp_rstp ]; then
+	echo "-1 -1"
+else
 	. /lib/ipq806x.sh
 	board=$(ipq806x_board_name)
 
@@ -20,6 +23,7 @@ get_cpu_mirror_port(){
 		echo "0 6"
 		;;
 	esac
+fi
 }
 
 get_switch_config_auto(){
@@ -27,6 +31,12 @@ get_switch_config_auto(){
 	board=$(ipq806x_board_name)
 
 	case "$board" in
+	ap160)
+		echo "=qca eth1 eth1 1 port1"
+		echo "=qca eth1 eth1 2 port2"
+		echo "=qca eth1 eth1 3 port3"
+		echo "=qca eth1 eth2 4 eth2"
+		;;
 	*)
 		echo "=qca eth1 eth1 1 port1"
 		echo "=qca eth1 eth1 2 port2"

@@ -169,20 +169,6 @@ board_set() {
 	if [ -e /proc/sys/net/edma/enable_stp_rstp ]; then
 		echo 0xfefefefe > /proc/sys/net/edma/athr_hdr_eth_type
 		echo 1 > /proc/sys/net/edma/enable_stp_rstp
-	else
-		cpu_mirror=$(/lib/functions/rstp.sh get_cpu_mirror_port)
-		cpu=`echo $cpu_mirror |cut -d " " -f1`
-		mirror=`echo $cpu_mirror |cut -d " " -f2`
-		ssdk_sh port hdrtype set enable 0xfefe
-		if [ $cpu -ge 0 ]; then
-			ssdk_sh port txhdr set $cpu onlymanagement
-			ssdk_sh port rxhdr set $cpu onlymanagement
-		fi
-		if [ $mirror -ge 0 ]; then
-			ssdk_sh port txhdr set $mirror onlymanagement
-			ssdk_sh port rxhdr set $mirror onlymanagement
-			ssdk_sh mirror analyPt set $mirror
-		fi
 	fi
 }
 
@@ -190,20 +176,6 @@ board_recover() {
 	if [ -e /proc/sys/net/edma/enable_stp_rstp ]; then
 		echo 0 > /proc/sys/net/edma/enable_stp_rstp
 		echo 0 > /proc/sys/net/edma/athr_hdr_eth_type
-	else
-		cpu_mirror=$(/lib/functions/rstp.sh get_cpu_mirror_port)
-		cpu=`echo $cpu_mirror |cut -d " " -f1`
-		mirror=`echo $cpu_mirror |cut -d " " -f2`
-		ssdk_sh port hdrtype set disable 0
-		if [ $cpu -ge 0 ]; then
-			ssdk_sh port txhdr set $cpu noheader
-			ssdk_sh port rxhdr set $cpu noheader
-		fi
-		if [ $mirror -ge 0 ]; then
-			ssdk_sh port txhdr set $mirror noheader
-			ssdk_sh port rxhdr set $mirror noheader
-			ssdk_sh mirror analyPt set 0xf
-		fi
 	fi
 }
 
