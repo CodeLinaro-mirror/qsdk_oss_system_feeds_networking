@@ -1,7 +1,7 @@
 diff -Nur a/linux/include/openswan/ipsec_kversion.h b/linux/include/openswan/ipsec_kversion.h
---- a/linux/include/openswan/ipsec_kversion.h	2015-04-01 15:53:20.853502069 -0700
-+++ b/linux/include/openswan/ipsec_kversion.h	2015-04-01 15:54:55.469504451 -0700
-@@ -479,6 +479,16 @@
+--- a/linux/include/openswan/ipsec_kversion.h	2015-06-17 12:43:09.595536387 -0700
++++ b/linux/include/openswan/ipsec_kversion.h	2015-06-17 12:43:38.923537125 -0700
+@@ -479,6 +479,20 @@
  # define DEFINE_RWLOCK(x) rwlock_t x = RW_LOCK_UNLOCKED
  #endif
  
@@ -15,19 +15,24 @@ diff -Nur a/linux/include/openswan/ipsec_kversion.h b/linux/include/openswan/ips
 +# define IP_SELECT_IDENT_NEW2
 +#endif
 +
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,3,37)
++#define IP_SELECT_IDENT
++#endif
++
  /*
   * kuid_t <=> uint32_t conversion
   */
 diff -Nur a/linux/include/openswan/ipsec_param2.h b/linux/include/openswan/ipsec_param2.h
---- a/linux/include/openswan/ipsec_param2.h	2015-04-01 15:53:20.853502069 -0700
-+++ b/linux/include/openswan/ipsec_param2.h	2015-04-01 15:56:12.761506398 -0700
-@@ -25,6 +25,11 @@
+--- a/linux/include/openswan/ipsec_param2.h	2015-06-17 12:43:09.595536387 -0700
++++ b/linux/include/openswan/ipsec_param2.h	2015-06-17 12:43:56.567537570 -0700
+@@ -25,6 +25,12 @@
  
  #define KLIPS_IP_SELECT_IDENT(iph, skb) __ip_select_ident(iph, skb_dst(skb), 0)
  
 +/* kernels > 2.4.102 */
 +#if defined(IP_SELECT_IDENT) && defined(IP_SELECT_IDENT_NEW2)
-+#define KLIPS_IP_SELECT_IDENT(iph, skb) ip_select_ident(skb, NULL)
++#undef KLIPS_IP_SELECT_IDENT(iph, skb)
++#define KLIPS_IP_SELECT_IDENT(iph, skb) ip_select_ident(skb, 1)
 +#endif
 +
  #if !defined(HAVE_CURRENT_UID)
