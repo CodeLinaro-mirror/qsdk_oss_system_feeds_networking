@@ -26,7 +26,7 @@ define Package/lacpd
   SECTION:=net
   CATEGORY:=Network
   MAINTAINER:=Xiaoping Fan <xfan@codeaurora.org>
-  DEPENDS:=+libubox +libuci +libubus +ubus +ubusd +kmod-qca-ssdk-nohnat
+  DEPENDS:=+libubox +libuci +libubus +ubus +ubusd +!PACKAGE_kmod-qca-ssdk-nohnat:kmod-qca-ssdk-hnat
   TITLE:=Link aggregation control protocol Daemon
 endef
 
