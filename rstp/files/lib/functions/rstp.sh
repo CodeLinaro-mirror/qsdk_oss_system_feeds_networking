@@ -12,23 +12,18 @@ get_atheros_header_type(){
 }
 
 get_cpu_mirror_port(){
+if [ -e /proc/sys/net/edma/enable_stp_rstp ]; then
+	echo "-1 -1"
+else
 	. /lib/ipq806x.sh
 	board=$(ipq806x_board_name)
 
 	case "$board" in
-	ap-dk*)
-		#format: "cpu_port:<attribute 1> mirror_port:<attribute 1>"
-		#<attribute 1>: is Atheros header inserted by driver?
-		#attributes means nothing if cpu_port or mirror_port is less than 0
-		echo "0:1 -1:1"
-		;;
 	*)
-		#format: "cpu_port:<attribute 1> mirror_port:<attribute 1>"
-		#<attribute 1>: is Atheros header inserted by driver?
-		#attributes means nothing if cpu_port or mirror_port is less than 0
-		echo "0:0 6:0"
+		echo "0 6"
 		;;
 	esac
+fi
 }
 
 get_switch_config_auto(){
