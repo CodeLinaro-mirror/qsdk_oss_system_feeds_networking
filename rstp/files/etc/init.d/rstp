@@ -167,7 +167,7 @@ rstpctl_stop_bridge(){
 }
 board_set() {
 	if [ -e /proc/sys/net/edma/enable_stp_rstp ]; then
-		echo 0xfefefefe > /proc/sys/net/edma/athr_hdr_eth_type
+		echo 0xfefe > /proc/sys/net/edma/athr_hdr_eth_type
 		echo 1 > /proc/sys/net/edma/enable_stp_rstp
 	fi
 }
