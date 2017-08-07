@@ -1,5 +1,18 @@
 #!/bin/sh
-# Copyright (c) 2013 The Linux Foundation. All rights reserved.
+
+# Copyright (c) 2013, 2017, The Linux Foundation. All rights reserved.
+#
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 . /lib/functions.sh
 
@@ -43,6 +56,8 @@ get_switch_config_auto(){
 		echo "=qca eth1 eth1 3 port3"
 		echo "=qca eth1 eth1 4 port4"
 		echo "=qca eth0 eth0 5 eth0"
+		;;
+	ap-hk*)
 		;;
 	*)
 		echo "=qca eth1 eth1 1 port1"

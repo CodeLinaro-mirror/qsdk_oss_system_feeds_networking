@@ -15,8 +15,9 @@ PKG_MAINTAINER:=Stephen Hemminger <shemminger@vyatta.com>
 
 PKG_LICENSE:=GPLv2
 PKG_LICENSE_FILES:=
-
 PKG_BUILD_PARALLEL:=1
+SSDK_NOHNAT:=PACKAGE_kmod-qca-ssdk-nohnat
+SSDK_HNAT:=PACKAGE_kmod-qca-ssdk-hnat
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,7 +27,11 @@ define Package/rstp
   MAINTAINER:=Stephen Hemminger <shemminger@vyatta.com>
   URL:=http://git.kernel.org/cgit/linux/kernel/git/shemminger/rstp.git/
   TITLE:=Rapid Spanning Tree Protocol implement
-  DEPENDS:=+kmod-qca-ssdk-hnat
+  DEPENDS:=+$(SSDK_NOHNAT):kmod-qca-ssdk-nohnat +$(SSDK_HNAT):kmod-qca-ssdk-hnat
+endef
+
+define Package/rstp/description
+  This package installs the RSTP daemon and tools
 endef
 
 TARGET_CFLAGS += \
