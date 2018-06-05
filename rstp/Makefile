@@ -35,7 +35,10 @@ define Package/rstp/description
 endef
 
 TARGET_CFLAGS += \
-	-I$(STAGING_DIR)/usr/include/qca-ssdk
+	-I$(STAGING_DIR)/usr/include/qca-ssdk \
+	-fpie
+
+TARGET_LDFLAGS += -pie
 
 define Package/rstp/install
 	$(INSTALL_DIR) $(1)/sbin
