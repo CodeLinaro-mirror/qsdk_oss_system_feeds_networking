@@ -1,0 +1,48 @@
+--- accel_pptp_org/accel-pptp-0.8.5/Makefile	2010-10-06 18:57:46.000000000 +0530
++++ accel-pptp-0.8.5/Makefile	2018-07-24 15:18:42.877546072 +0530
+@@ -1,10 +1,12 @@
+-PPPD := $(shell /usr/sbin/pppd --version 2>&1 | grep version)
+-PPPD := $(patsubst pppd,,$(PPPD))
+-PPPD := $(patsubst version,,$(PPPD))
+-PPPD := $(strip $(PPPD))
++PPPD_VERSION:="2.4.7"
++PKG_DIR:=ipkg-install
++USR_SBIN:=$(PKG_DIR)/usr/sbin
++USR_LIB_PPPD:=$(PKG_DIR)/usr/lib/pppd/$(PPPD_VERSION)
++USR_LIB_PPTPD:=$(PKG_DIR)/usr/lib/pptpd
+ 
+-default: module plugin pptpd
+-client: module plugin
++
++default: plugin pptpd
++client: plugin
+ server: default
+ 
+ module:
+@@ -20,10 +22,10 @@
+ 	(cd pptpd-1.3.3; make)
+ 
+ pppd_plugin/Makefile: pptpd-1.3.3/Makefile
+-	(cd pppd_plugin; ./configure)
++	(cd pppd_plugin; ./configure KDIR=${kernel_dir}/user_headers --sbindir="/usr/sbin")
+ 
+ pptpd-1.3.3/Makefile:
+-	(cd pptpd-1.3.3; ./configure)
++	(cd pptpd-1.3.3; ./configure KDIR=${kernel_dir}/user_headers --sbindir="/usr/sbin")
+ 
+ 
+ module_install: module
+@@ -45,3 +47,13 @@
+ 	(cd kernel/driver; make clean)
+ 	(cd pppd_plugin; make distclean)
+ 	(cd pptpd-1.3.3; make distclean)
++install:
++	mkdir -p $(PKG_DIR)
++	mkdir -p $(USR_SBIN)
++	mkdir -p $(USR_LIB_PPPD)
++	mkdir -p $(USR_LIB_PPTPD)
++	install -m 0744 pptpd-1.3.3/bcrelay $(USR_SBIN)/
++	install -m 0744 pptpd-1.3.3/pptpd $(USR_SBIN)/
++	install -m 0744 pptpd-1.3.3/pptpctrl $(USR_SBIN)/
++	install -m 0744 pppd_plugin/src/.libs/pptp.so.0.0.0 $(USR_LIB_PPPD)/pptp.so
++	install -m 0744 pptpd-1.3.3/plugins/pptpd-logwtmp.so $(USR_LIB_PPTPD)/
