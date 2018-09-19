@@ -22,6 +22,7 @@ include $(INCLUDE_DIR)/package.mk
 define Package/accel_pptpd
   SECTION:=net
   CATEGORY:=Network
+  DEPENDS:=+ppp-mod-pptp
   TITLE:=Accel pptp server
   URL:=$(PKG_SOURCE_URL)
   SUBMENU:=VPN
@@ -32,23 +33,23 @@ CONFIGURE_ARGS += \
 
 TARGET_CFLAGS += \
 	-DBUILD_PPTP_DRIVER=FALSE
+TARGET_CPPFLAGS+= -fpie
+TARGET_LDFLAGS += -pie
+
+CONFIGURE_PATH=pptpd-1.3.3
+MAKE_PATH=pptpd-1.3.3
+CONFIGURE_ARGS += \
+		--target=$(KEXEC_TARGET_NAME) \
+		--host=$(REAL_GNU_TARGET_NAME) \
+		--build=$(GNU_HOST_NAME) \
+		KDIR="$(LINUX_DIR)/user_headers" \
+		--exec-prefix="$(PKG_INSTALL_DIR)"
 
 define Package/accel_pptpd/conffiles
 /etc/pptpd.conf
 /etc/ppp/options.pptpd
 endef
 
-define Build/Compile
-	$(MAKE) -C $(PKG_BUILD_DIR)			\
-		CC="$(TARGET_CC)"			\
-		host_alias="$(GNU_TARGET_NAME)"		\
-		target_alias="$(GNU_TARGET_NAME)"	\
-		build_alias="$(GNU_HOST_NAME)"		\
-		ac_cv_build="$(GNU_HOST_NAME)"		\
-		ac_cv_host="$(GNU_TARGET_NAME)"		\
-		kernel_dir="$(LINUX_DIR)"		\
-		default
-endef
 define Package/accel_pptpd/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(CP) \
@@ -57,9 +58,7 @@ define Package/accel_pptpd/install
 		$(PKG_INSTALL_DIR)/usr/sbin/pptpd \
 		$(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/usr/lib/pptpd
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pptpd/* $(1)/usr/lib/pptpd/
-	$(INSTALL_DIR) $(1)/usr/lib/pppd/$(PPPD_VERSION)
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pppd/$(PPPD_VERSION)/* $(1)/usr/lib/pppd/$(PPPD_VERSION)/
+	$(INSTALL_DATA) $(PKG_INSTALL_DIR)/lib/pptpd/* $(1)/usr/lib/pptpd/
 
 	$(INSTALL_DIR) $(1)/etc
 	$(INSTALL_DATA) ./files/pptpd.conf $(1)/etc/

@@ -1,13 +1,16 @@
---- accel-pptp-0.8.5/pptpd-1.3.3/plugins/Makefile	2010-10-06 18:57:46.000000000 +0530
-+++ accel-pptp-0.8.5/pptpd-1.3.3/plugins/Makefile	2018-07-24 14:59:15.405694707 +0530
-@@ -1,4 +1,4 @@
--CC	= gcc
-+CC	= aarch64-openwrt-linux-gcc
- COPTS	= -O2 -g
+--- a/pptpd-1.3.3/plugins/Makefile
++++ b/pptpd-1.3.3/plugins/Makefile
+@@ -3,7 +3,7 @@
  CFLAGS	= $(COPTS) -I.. -I../../include -fPIC
  LDFLAGS	= -shared
---- accel-pptp-0.8.5/pptpd-1.3.3/plugins/pppd.h	2010-10-06 18:57:46.000000000 +0530
-+++ accel-pptp-0.8.5/pptpd-1.3.3/plugins/pppd.h	2018-07-24 15:03:07.542462686 +0530
+ LDADD   = -lutil
+-INSTALL	= install -o root
++INSTALL	= install
+ prefix  = /usr/local
+ 
+ PLUGINS = pptpd-logwtmp.so
+--- a/pptpd-1.3.3/plugins/pppd.h
++++ b/pptpd-1.3.3/plugins/pppd.h
 @@ -55,7 +55,7 @@
  #include <sys/param.h>		/* for MAXPATHLEN and BSD4_4, if defined */
  #include <sys/types.h>		/* for u_int32_t, if defined */
