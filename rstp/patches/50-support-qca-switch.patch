@@ -1,7 +1,7 @@
-diff --git a/Makefile b/Makefile
-index f903f91..1cbc40b 100644
---- a/Makefile
-+++ b/Makefile
+Index: rstp-2011-10-11/Makefile
+===================================================================
+--- rstp-2011-10-11.orig/Makefile	2018-11-16 14:34:25.099289753 +0530
++++ rstp-2011-10-11/Makefile	2018-11-16 14:34:25.095289766 +0530
 @@ -1,6 +1,6 @@
  
  DSOURCES =  brstate.c libnetlink.c epoll_loop.c bridge_track.c \
@@ -10,10 +10,10 @@ index f903f91..1cbc40b 100644
  
  DOBJECTS = $(DSOURCES:.c=.o)
  
-diff --git a/bridge_track.c b/bridge_track.c
-index 2967d08..4db8914 100644
---- a/bridge_track.c
-+++ b/bridge_track.c
+Index: rstp-2011-10-11/bridge_track.c
+===================================================================
+--- rstp-2011-10-11.orig/bridge_track.c	2018-11-16 14:34:25.099289753 +0530
++++ rstp-2011-10-11/bridge_track.c	2018-11-16 14:34:25.095289766 +0530
 @@ -44,6 +44,8 @@
  
  #include "log.h"
@@ -23,7 +23,7 @@ index 2967d08..4db8914 100644
  /*------------------------------------------------------------*/
  
  struct ifdata {
-@@ -162,11 +164,13 @@ void update_port_stp_config(struct ifdata *ifc, UID_STP_PORT_CFG_T * cfg)
+@@ -162,11 +164,13 @@
  		ifc->admin_point2point = cfg->admin_point2point;
  }
  
@@ -38,7 +38,7 @@ index 2967d08..4db8914 100644
  
  	/* Add port to STP */
  	instance_begin(ifc->master);
-@@ -320,7 +324,7 @@ struct ifdata *create_if(int if_index, struct ifdata *br)
+@@ -320,7 +324,7 @@
  	p->is_bridge = (br == NULL);
  
  	/* TODO: purge use of name, due to issue with renameing */
@@ -47,7 +47,7 @@ index 2967d08..4db8914 100644
  
  	if (p->is_bridge) {
  		INFO("Add bridge %s", p->name);
-@@ -351,6 +355,8 @@ struct ifdata *create_if(int if_index, struct ifdata *br)
+@@ -351,6 +355,8 @@
  	/* Add to interface list */
  	ADD_TO_LIST(if_head, next, p);
  
@@ -56,7 +56,7 @@ index 2967d08..4db8914 100644
  	return p;
  }
  
-@@ -380,9 +386,32 @@ void delete_if(struct ifdata *ifc)
+@@ -380,9 +386,32 @@
  	REMOVE_FROM_LIST(if_head, next, ifc,
  			 "Can't find interface ifindex %d on iflist",
  			 ifc->if_index);
@@ -89,7 +89,7 @@ index 2967d08..4db8914 100644
  static int stp_enabled(struct ifdata *br)
  {
  	char path[40 + IFNAMSIZ];
-@@ -503,6 +532,9 @@ int bridge_notify(int br_index, int if_index, int newlink,
+@@ -503,6 +532,9 @@
  {
  	struct ifdata *br = NULL;
  
@@ -99,7 +99,7 @@ index 2967d08..4db8914 100644
  	LOG("br_index %d, if_index %d, up %d running %d",
  	    br_index, if_index, (flags & IFF_UP), flags & IFF_RUNNING);
  
-@@ -573,7 +605,7 @@ int bridge_notify(int br_index, int if_index, int newlink,
+@@ -573,7 +605,7 @@
  		} else {	/* This may be a new link */
  			if (!ifc) {
  				char ifname[IFNAMSIZ];
@@ -108,7 +108,7 @@ index 2967d08..4db8914 100644
  				    && is_bridge(ifname)) {
  					ifc = create_if(if_index, NULL);
  					if (!ifc) {
-@@ -653,6 +685,20 @@ void bridge_bpdu_rcv(int if_index, const unsigned char *data, int len)
+@@ -653,6 +685,20 @@
  	instance_end();
  }
  
@@ -129,7 +129,7 @@ index 2967d08..4db8914 100644
  void bridge_one_second(void)
  {
  	//  LOG("");
-@@ -672,6 +718,7 @@ void bridge_one_second(void)
+@@ -672,6 +718,7 @@
  	if (count % 60 == 0)
  		bridge_get_configuration();
  
@@ -137,7 +137,7 @@ index 2967d08..4db8914 100644
  }
  
  /* Implementing STP_OUT functions */
-@@ -696,23 +743,32 @@ STP_OUT_flush_lt(IN int port_index, IN int vlan_id,
+@@ -696,23 +743,32 @@
  
  	char fname[128];
  	if (port_index == 0) {	/* i.e. passed port_index was 0 */
@@ -177,7 +177,7 @@ index 2967d08..4db8914 100644
  			}
  		}
  	} else
-@@ -782,8 +838,8 @@ STP_OUT_set_port_state(IN int port_index, IN int vlan_id,
+@@ -782,8 +838,8 @@
  		fprintf(stderr, "set_port_state: Unexpected state %d\n", state);
  		return -1;
  	}
@@ -188,7 +188,7 @@ index 2967d08..4db8914 100644
  	return 0;
  }
  
-@@ -881,7 +937,7 @@ int CTL_enable_bridge_rstp(int br_index, int enable)
+@@ -881,7 +937,7 @@
  	struct ifdata *br = find_if(br_index);
  	if (br == NULL) {
  		char ifname[IFNAMSIZ];
@@ -197,7 +197,7 @@ index 2967d08..4db8914 100644
  			br = create_if(br_index, NULL);
  	}
  	if (br == NULL || !br->is_bridge)
-@@ -1003,7 +1059,7 @@ int CTL_add_bridge(char *name)
+@@ -1003,7 +1059,7 @@
  	int br_index, up;
  	struct ifdata *br = NULL;
  
@@ -206,7 +206,7 @@ index 2967d08..4db8914 100644
  	if(br_index == 0) {
  		ERROR("bridge %s not exist", name);
  		return 0;
-@@ -1036,13 +1092,13 @@ int CTL_add_bridge_port(char *br_name, char *pt_name)
+@@ -1036,13 +1092,13 @@
  	int br_index, if_index, up;
  	struct ifdata *br, *br_port;
  
@@ -222,7 +222,7 @@ index 2967d08..4db8914 100644
  	if(if_index == 0) {
  		ERROR("bridge port %s not exist", pt_name);
  		return 0;
-@@ -1090,5 +1146,17 @@ int CTL_add_bridge_port(char *br_name, char *pt_name)
+@@ -1090,5 +1146,17 @@
  	return 0;
  }
  
@@ -240,19 +240,23 @@ index 2967d08..4db8914 100644
 +
  #undef CTL_CHECK_BRIDGE_PORT
  #undef CTL_CHECK_BRIDGE
-diff --git a/brmon.c b/brmon.c
-index 96a1113..1a6eeb3 100644
---- a/brmon.c
-+++ b/brmon.c
-@@ -27,6 +27,7 @@
+Index: rstp-2011-10-11/brmon.c
+===================================================================
+--- rstp-2011-10-11.orig/brmon.c	2018-11-16 14:34:25.099289753 +0530
++++ rstp-2011-10-11/brmon.c	2018-11-16 14:34:55.555190547 +0530
+@@ -27,8 +27,11 @@
  #include "libnetlink.h"
  
  #include "bridge_ctl.h"
 +#include "netif_utils.h"
  
++#if 0
  static const char SNAPSHOT[] = "v0.1";
++#endif
  
-@@ -66,7 +67,7 @@ static int dump_msg(const struct sockaddr_nl *who, struct nlmsghdr *n,
+ static int dump_msg(const struct sockaddr_nl *who, struct nlmsghdr *n,
+ 		    void *arg)
+@@ -66,7 +69,7 @@
  
  	if (tb[IFLA_MASTER]) {
  	   master = *(int*)RTA_DATA(tb[IFLA_MASTER]);
@@ -261,10 +265,10 @@ index 96a1113..1a6eeb3 100644
  	}
  
  	fprintf(fp, "\n");
-diff --git a/brstate.c b/brstate.c
-index 889c2ea..e63519d 100644
---- a/brstate.c
-+++ b/brstate.c
+Index: rstp-2011-10-11/brstate.c
+===================================================================
+--- rstp-2011-10-11.orig/brstate.c	2018-11-16 14:34:25.099289753 +0530
++++ rstp-2011-10-11/brstate.c	2018-11-16 14:34:25.095289766 +0530
 @@ -25,6 +25,7 @@
  #include <string.h>
  
@@ -273,7 +277,7 @@ index 889c2ea..e63519d 100644
  
  static int br_set_state(struct rtnl_handle *rth, unsigned ifindex, __u8 state)
  {
-@@ -53,7 +54,11 @@ extern struct rtnl_handle rth_state;
+@@ -53,7 +54,11 @@
  
  int bridge_set_state(int ifindex, int brstate)
  {
@@ -286,11 +290,11 @@ index 889c2ea..e63519d 100644
  	if (err < 0) {
  		fprintf(stderr,
  			"Couldn't set bridge state, ifindex %d, state %d\n",
-diff --git a/ctl_cli_wrap.c b/ctl_cli_wrap.c
-index 8ad65c4..b7c5985 100644
---- a/ctl_cli_wrap.c
-+++ b/ctl_cli_wrap.c
-@@ -35,6 +35,9 @@ CLIENT_SIDE_FUNCTION(enable_bridge_rstp)
+Index: rstp-2011-10-11/ctl_cli_wrap.c
+===================================================================
+--- rstp-2011-10-11.orig/ctl_cli_wrap.c	2018-11-16 14:34:25.099289753 +0530
++++ rstp-2011-10-11/ctl_cli_wrap.c	2018-11-16 14:34:25.095289766 +0530
+@@ -35,6 +35,9 @@
      CLIENT_SIDE_FUNCTION(set_debug_level)
      CLIENT_SIDE_FUNCTION(add_bridge)
      CLIENT_SIDE_FUNCTION(add_bridge_port)
@@ -300,11 +304,11 @@ index 8ad65c4..b7c5985 100644
  #include <base.h>
  const char *CTL_error_explanation(int err_no)
  {
-diff --git a/ctl_functions.h b/ctl_functions.h
-index 4a04d62..33afae4 100644
---- a/ctl_functions.h
-+++ b/ctl_functions.h
-@@ -46,6 +46,10 @@ int CTL_add_bridge(char *name);
+Index: rstp-2011-10-11/ctl_functions.h
+===================================================================
+--- rstp-2011-10-11.orig/ctl_functions.h	2018-11-16 14:34:25.099289753 +0530
++++ rstp-2011-10-11/ctl_functions.h	2018-11-16 14:34:25.095289766 +0530
+@@ -46,6 +46,10 @@
  
  int CTL_add_bridge_port(char *br_name, char *pt_name);
  
@@ -315,11 +319,11 @@ index 4a04d62..33afae4 100644
  #define CTL_ERRORS \
   CHOOSE(Err_Interface_not_a_bridge), \
   CHOOSE(Err_Bridge_RSTP_not_enabled), \
-diff --git a/ctl_main.c b/ctl_main.c
-index a90e185..d3b2714 100644
---- a/ctl_main.c
-+++ b/ctl_main.c
-@@ -80,7 +80,7 @@ static char *stp_state2str(RSTP_PORT_STATE stp_port_state, int detail)
+Index: rstp-2011-10-11/ctl_main.c
+===================================================================
+--- rstp-2011-10-11.orig/ctl_main.c	2018-11-16 14:34:25.099289753 +0530
++++ rstp-2011-10-11/ctl_main.c	2018-11-16 14:34:25.095289766 +0530
+@@ -80,7 +80,7 @@
  static void CLI_out_port_id(int port, unsigned char cr)
  {
  	static char ifname[IFNAMSIZ];
@@ -328,7 +332,7 @@ index a90e185..d3b2714 100644
  		printf("%s", ifname);
  	else
  		printf("Ifindex %02d", port);
-@@ -90,7 +90,9 @@ static void CLI_out_port_id(int port, unsigned char cr)
+@@ -90,7 +90,9 @@
  
  int get_index_die(const char *ifname, const char *doc, int die)
  {
@@ -339,11 +343,11 @@ index a90e185..d3b2714 100644
  	if (r == 0) {
  		fprintf(stderr,
  			"Can't find index for %s %s. Not a valid interface.\n",
-diff --git a/ctl_socket.c b/ctl_socket.c
-index 1438e5f..301d410 100644
---- a/ctl_socket.c
-+++ b/ctl_socket.c
-@@ -70,6 +70,8 @@ int handle_message(int cmd, void *inbuf, int lin, void *outbuf, int *lout)
+Index: rstp-2011-10-11/ctl_socket.c
+===================================================================
+--- rstp-2011-10-11.orig/ctl_socket.c	2018-11-16 14:34:25.099289753 +0530
++++ rstp-2011-10-11/ctl_socket.c	2018-11-16 14:34:25.095289766 +0530
+@@ -70,6 +70,8 @@
  		SERVER_MESSAGE_CASE(set_debug_level);
  		SERVER_MESSAGE_CASE(add_bridge);
  		SERVER_MESSAGE_CASE(add_bridge_port);
@@ -352,11 +356,11 @@ index 1438e5f..301d410 100644
  
  	default:
  		ERROR("CTL: Unknown command %d", cmd);
-diff --git a/ctl_socket.h b/ctl_socket.h
-index a4b7c7a..d931b1e 100644
---- a/ctl_socket.h
-+++ b/ctl_socket.h
-@@ -180,6 +180,38 @@ struct add_bridge_port_OUT {
+Index: rstp-2011-10-11/ctl_socket.h
+===================================================================
+--- rstp-2011-10-11.orig/ctl_socket.h	2018-11-16 14:34:25.099289753 +0530
++++ rstp-2011-10-11/ctl_socket.h	2018-11-16 14:34:25.095289766 +0530
+@@ -180,6 +180,38 @@
  #define add_bridge_port_COPY_OUT ({ (void)0; })
  #define add_bridge_port_CALL (in->br_name, in->pt_name)
  
@@ -395,10 +399,10 @@ index a4b7c7a..d931b1e 100644
  /* General case part in ctl command server switch */
  #define SERVER_MESSAGE_CASE(name) \
  case CMD_CODE_ ## name : do { \
-diff --git a/main.c b/main.c
-index 33eebec..311dc7d 100644
---- a/main.c
-+++ b/main.c
+Index: rstp-2011-10-11/main.c
+===================================================================
+--- rstp-2011-10-11.orig/main.c	2018-11-16 14:34:25.099289753 +0530
++++ rstp-2011-10-11/main.c	2018-11-16 14:34:25.095289766 +0530
 @@ -27,6 +27,7 @@
  #include "ctl_socket_server.h"
  #include "netif_utils.h"
@@ -407,7 +411,7 @@ index 33eebec..311dc7d 100644
  #include "log.h"
  
  #include <stdio.h>
-@@ -55,6 +56,7 @@ topology_mode_t get_topology_mode(void)
+@@ -55,6 +56,7 @@
  
  static void handle_signal(int signo)
  {
@@ -415,7 +419,7 @@ index 33eebec..311dc7d 100644
  	epoll_end_loop();
  }
  
-@@ -105,6 +107,7 @@ int main(int argc, char *argv[])
+@@ -105,6 +107,7 @@
  	TST(ctl_socket_init() == 0, -1);
  	TST(packet_sock_init() == 0, -1);
  	TST(netsock_init() == 0, -1);
@@ -423,10 +427,10 @@ index 33eebec..311dc7d 100644
  	TST(init_bridge_ops() == 0, -1);
  	if (become_daemon) {
  		FILE *f = fopen("/var/run/rstpd.pid", "w");
-diff --git a/netif_utils.c b/netif_utils.c
-index b3e7baa..4e96d5a 100644
---- a/netif_utils.c
-+++ b/netif_utils.c
+Index: rstp-2011-10-11/netif_utils.c
+===================================================================
+--- rstp-2011-10-11.orig/netif_utils.c	2018-11-16 14:34:25.099289753 +0530
++++ rstp-2011-10-11/netif_utils.c	2018-11-16 14:34:25.095289766 +0530
 @@ -40,6 +40,7 @@
  #include <linux/sockios.h>
  
@@ -435,7 +439,7 @@ index b3e7baa..4e96d5a 100644
  
  int netsock = -1;
  
-@@ -57,6 +58,10 @@ int netsock_init(void)
+@@ -57,6 +58,10 @@
  int get_hwaddr(char *ifname, unsigned char *hwaddr)
  {
  	struct ifreq ifr;
@@ -446,7 +450,7 @@ index b3e7baa..4e96d5a 100644
  	memset(&ifr, 0, sizeof(ifr));
  	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
  	if (ioctl(netsock, SIOCGIFHWADDR, &ifr) < 0) {
-@@ -74,6 +79,9 @@ int ethtool_get_speed_duplex(char *ifname, int *speed, int *duplex)
+@@ -74,6 +79,9 @@
  	strncpy(ifr.ifr_name, ifname, IFNAMSIZ);
  	struct ethtool_cmd ecmd;
  
@@ -456,7 +460,7 @@ index b3e7baa..4e96d5a 100644
  	ecmd.cmd = ETHTOOL_GSET;
  	ifr.ifr_data = (caddr_t) & ecmd;
  	if (ioctl(netsock, SIOCETHTOOL, &ifr) < 0) {
-@@ -89,10 +97,16 @@ int ethtool_get_speed_duplex(char *ifname, int *speed, int *duplex)
+@@ -89,10 +97,16 @@
  int get_link_status(const char *name)
  {
  	int s = -1;
@@ -473,7 +477,7 @@ index b3e7baa..4e96d5a 100644
  	if((s = socket(AF_INET, SOCK_DGRAM, 0)) <= 0) return 0;
  
  	strncpy(ifr.ifr_name, name, sizeof(ifr.ifr_name));
-@@ -107,6 +121,36 @@ int get_link_status(const char *name)
+@@ -107,6 +121,36 @@
  	return ((ifr.ifr_flags & (IFF_UP|IFF_RUNNING)) == (IFF_UP|IFF_RUNNING));
  }
  
@@ -510,7 +514,7 @@ index b3e7baa..4e96d5a 100644
  /********* Sysfs based utility functions *************/
  
  /* This sysfs stuff might break with interface renames */
-@@ -122,6 +166,10 @@ int is_bridge(char *if_name)
+@@ -122,6 +166,10 @@
  */
  int is_bridge_slave(char *br_name, char *if_name)
  {
@@ -521,11 +525,11 @@ index b3e7baa..4e96d5a 100644
  	char path[32 + 2 * IFNAMSIZ];
  	sprintf(path, "/sys/class/net/%s/brif/%s", br_name, if_name);
  	return (access(path, R_OK) == 0);
-diff --git a/netif_utils.h b/netif_utils.h
-index cc45e02..3319341 100644
---- a/netif_utils.h
-+++ b/netif_utils.h
-@@ -34,6 +34,10 @@ int ethtool_get_speed_duplex(char *ifname, int *speed, int *duplex);
+Index: rstp-2011-10-11/netif_utils.h
+===================================================================
+--- rstp-2011-10-11.orig/netif_utils.h	2018-11-16 14:34:25.099289753 +0530
++++ rstp-2011-10-11/netif_utils.h	2018-11-16 14:34:25.095289766 +0530
+@@ -34,6 +34,10 @@
  
  int get_link_status(const char *name);
  
@@ -536,10 +540,10 @@ index cc45e02..3319341 100644
  /********* Sysfs based utility functions *************/
  int is_bridge(char *if_name);
  
-diff --git a/packet.c b/packet.c
-index 001f6d4..09b06c0 100644
---- a/packet.c
-+++ b/packet.c
+Index: rstp-2011-10-11/packet.c
+===================================================================
+--- rstp-2011-10-11.orig/packet.c	2018-11-16 14:34:25.099289753 +0530
++++ rstp-2011-10-11/packet.c	2018-11-16 14:34:25.095289766 +0530
 @@ -45,6 +45,7 @@
  #include <linux/filter.h>
  
@@ -548,7 +552,7 @@ index 001f6d4..09b06c0 100644
  
  static struct epoll_event_handler packet_event;
  
-@@ -76,6 +77,10 @@ void packet_send(int ifindex, const unsigned char *data, int len)
+@@ -76,6 +77,10 @@
  		.sll_halen = ETH_ALEN,
  	};
  
@@ -559,11 +563,10 @@ index 001f6d4..09b06c0 100644
  	memcpy(&sl.sll_addr, data, ETH_ALEN);
  
  #ifdef PACKET_DEBUG
-diff --git a/qca_switch.c b/qca_switch.c
-new file mode 100644
-index 0000000..038d04e
---- /dev/null
-+++ b/qca_switch.c
+Index: rstp-2011-10-11/qca_switch.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ rstp-2011-10-11/qca_switch.c	2018-11-16 14:34:25.095289766 +0530
 @@ -0,0 +1,409 @@
 +#include <stdarg.h>
 +#include <unistd.h>
@@ -974,11 +977,10 @@ index 0000000..038d04e
 +{
 +	register_switch_ops(&qca_switch_ops);
 +}
-diff --git a/qca_switch.h b/qca_switch.h
-new file mode 100644
-index 0000000..4f581ee
---- /dev/null
-+++ b/qca_switch.h
+Index: rstp-2011-10-11/qca_switch.h
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ rstp-2011-10-11/qca_switch.h	2018-11-16 14:34:25.095289766 +0530
 @@ -0,0 +1,69 @@
 +
 +#ifndef QCA_SWITCH_H
@@ -1049,11 +1051,10 @@ index 0000000..4f581ee
 +	QCA_STP_STATE_FORWARD
 +};
 +#endif /* QCA_SWITCH_H */
-diff --git a/switch_api.c b/switch_api.c
-new file mode 100644
-index 0000000..9e5a6fc
---- /dev/null
-+++ b/switch_api.c
+Index: rstp-2011-10-11/switch_api.c
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ rstp-2011-10-11/switch_api.c	2018-11-16 14:34:25.099289753 +0530
 @@ -0,0 +1,590 @@
 +#include "switch_api.h"
 +#include "bridge_ctl.h"
@@ -1645,11 +1646,10 @@ index 0000000..9e5a6fc
 +
 +	return 0;
 +}
-diff --git a/switch_api.h b/switch_api.h
-new file mode 100644
-index 0000000..c982b0c
---- /dev/null
-+++ b/switch_api.h
+Index: rstp-2011-10-11/switch_api.h
+===================================================================
+--- /dev/null	1970-01-01 00:00:00.000000000 +0000
++++ rstp-2011-10-11/switch_api.h	2018-11-16 14:34:25.099289753 +0530
 @@ -0,0 +1,162 @@
 +
 +#ifndef SWITCH_API_H
