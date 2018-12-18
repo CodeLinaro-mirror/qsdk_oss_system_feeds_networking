@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006-2011 OpenWrt.org
+# Copyright (C) 2006-2011, 2018 OpenWrt.org
 
 START=55
 
@@ -165,6 +165,7 @@ rstpctl_stop_bridge(){
 
 	brctl stp $bridge_ifname off
 }
+
 board_set() {
 	if [ -e /proc/sys/net/edma/enable_stp_rstp ]; then
 		echo 0xfefe > /proc/sys/net/edma/athr_hdr_eth_type
@@ -177,6 +178,27 @@ board_recover() {
 		echo 0 > /proc/sys/net/edma/enable_stp_rstp
 		echo 0 > /proc/sys/net/edma/athr_hdr_eth_type
 	fi
+}
+
+__brctl_stp_on_or_off() {
+	local config="$1"
+	local on_or_off="$2"
+	local type br_device br_ifname
+
+	config_get type "$config" type
+	[ -z "$type" -o ! "$type" = "bridge" ] && return
+
+	br_device="$config"
+	network_get_device br_ifname $br_device
+
+	brctl stp $br_ifname $on_or_off
+	sleep 1
+}
+
+brctl_stp_on_or_off() {
+	. /lib/functions/network.sh
+	config_load network
+	config_foreach __brctl_stp_on_or_off interface $1
 }
 
 start() {
@@ -192,9 +214,7 @@ start() {
 		service_start /sbin/rstpd -a
 		sleep 1
 
-		. /lib/functions/network.sh
-		network_get_device ifname lan
-		brctl stp $ifname on
+		brctl_stp_on_or_off "on"
 	else
 		validate_config || return
 
@@ -221,11 +241,7 @@ stop() {
 
 	config_get autoMode global autoMode 0
 	if [ "$autoMode" = "1" ] ; then
-		. /lib/functions/network.sh
-		network_get_device ifname lan
-		brctl stp $ifname off
-
-		sleep 1
+		brctl_stp_on_or_off "off"
 		service_stop /sbin/rstpd
 	else
 		validate_config || return
