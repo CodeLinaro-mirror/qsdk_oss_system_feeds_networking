@@ -36,17 +36,7 @@ $(call Package/openswan/Default)
   SECTION:=net
   CATEGORY:=Network
   TITLE+= (daemon)
-ifdef CONFIG_TARGET_ipq_ipq807x
   DEPENDS+= +libgmp +kmod-openswan
-else ifdef CONFIG_TARGET_ipq_ipq807x_64
-  DEPENDS+= +libgmp +kmod-openswan
-else ifdef CONFIG_TARGET_ipq_ipq806x
-  DEPENDS+= +libgmp +kmod-openswan
-else ifdef CONFIG_TARGET_ipq_ipq40xx
-  DEPENDS+= +libgmp +kmod-openswan
-else
-  DEPENDS+= +libgmp
-endif
 endef
 
 define Package/openswan/description
@@ -61,6 +51,10 @@ $(call Package/openswan/Default)
 ifdef CONFIG_TARGET_ipq_ipq807x
   DEPENDS+=kmod-crypto-ocf
 else ifdef CONFIG_TARGET_ipq_ipq807x_64
+  DEPENDS+=kmod-crypto-ocf
+else ifdef CONFIG_TARGET_ipq_ipq60xx
+  DEPENDS+=kmod-crypto-ocf
+else ifdef CONFIG_TARGET_ipq_ipq60xx_64
   DEPENDS+=kmod-crypto-ocf
 else ifdef CONFIG_TARGET_ipq_ipq806x
   DEPENDS+=kmod-crypto-ocf
