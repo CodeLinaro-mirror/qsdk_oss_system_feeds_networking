@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright (c) 2013, 2017, The Linux Foundation. All rights reserved.
+# Copyright (c) 2013, 2017, 2019 The Linux Foundation. All rights reserved.
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -62,7 +62,7 @@ get_switch_config_auto(){
 		echo "=qca eth1 eth1 4 port4"
 		echo "=qca eth0 eth0 5 eth0"
 		;;
-	ap-hk*)
+	ap-hk*|ap-ac*)
 		;;
 	*)
 		echo "=qca eth1 eth1 1 port1"
