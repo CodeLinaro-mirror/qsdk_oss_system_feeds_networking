@@ -33,6 +33,7 @@ rstpctl_bridge_list() {
 			if [ "$autoMode" = "1" ] ; then
 				network_get_device lanifname lan
 				if [ "$lanifname" = "$ifname" ]; then
+					sleep 1
 					/etc/init.d/rstp restart
 				fi
 			else
