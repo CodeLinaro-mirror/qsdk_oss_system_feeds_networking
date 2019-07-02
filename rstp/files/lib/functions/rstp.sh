@@ -62,7 +62,7 @@ get_switch_config_auto(){
 		echo "=qca eth1 eth1 4 port4"
 		echo "=qca eth0 eth0 5 eth0"
 		;;
-	ap-hk*|ap-ac*)
+	ap-hk*|ap-ac*|ap-cp*)
 		;;
 	*)
 		echo "=qca eth1 eth1 1 port1"
