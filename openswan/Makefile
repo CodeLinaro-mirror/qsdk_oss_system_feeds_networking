@@ -48,19 +48,7 @@ define KernelPackage/openswan
 $(call Package/openswan/Default)
   SUBMENU:=Network Support
   TITLE+= (kernel module)
-ifdef CONFIG_TARGET_ipq_ipq807x
-  DEPENDS+=kmod-crypto-ocf
-else ifdef CONFIG_TARGET_ipq_ipq807x_64
-  DEPENDS+=kmod-crypto-ocf
-else ifdef CONFIG_TARGET_ipq_ipq60xx
-  DEPENDS+=kmod-crypto-ocf
-else ifdef CONFIG_TARGET_ipq_ipq60xx_64
-  DEPENDS+=kmod-crypto-ocf
-else ifdef CONFIG_TARGET_ipq_ipq806x
-  DEPENDS+=kmod-crypto-ocf
-else ifdef CONFIG_TARGET_ipq_ipq40xx
-  DEPENDS+=kmod-crypto-ocf
-endif
+  DEPENDS:=+kmod-crypto-ocf
   FILES:=$(PKG_BUILD_DIR)/modobj*/ipsec.$(LINUX_KMOD_SUFFIX)
 endef
 
