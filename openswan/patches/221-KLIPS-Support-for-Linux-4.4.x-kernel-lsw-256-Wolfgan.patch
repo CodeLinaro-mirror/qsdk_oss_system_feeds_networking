@@ -1,6 +1,6 @@
-diff -Nur a/linux/include/openswan/ipsec_kversion.h openswan-2.6.41/linux/include/openswan/ipsec_kversion.h
---- a/linux/include/openswan/ipsec_kversion.h	2016-10-14 17:43:01.629366679 -0700
-+++ openswan-2.6.41/linux/include/openswan/ipsec_kversion.h	2016-10-14 17:50:01.241354256 -0700
+diff -Nur --no-dereference a/linux/include/openswan/ipsec_kversion.h openswan-2.6.51.3/linux/include/openswan/ipsec_kversion.h
+--- a/linux/include/openswan/ipsec_kversion.h	2019-04-04 15:03:46.602418731 -0700
++++ openswan-2.6.51.3/linux/include/openswan/ipsec_kversion.h	2019-04-04 15:04:05.726418165 -0700
 @@ -127,7 +127,9 @@
  
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,12)
@@ -12,9 +12,9 @@ diff -Nur a/linux/include/openswan/ipsec_kversion.h openswan-2.6.41/linux/includ
  #  define NET_26_24_SKALLOC
  # else
  #  define NET_26_12_SKALLOC
-diff -Nur a/linux/include/openswan/pfkey.h openswan-2.6.41/linux/include/openswan/pfkey.h
---- a/linux/include/openswan/pfkey.h	2016-10-14 17:43:01.629366679 -0700
-+++ openswan-2.6.41/linux/include/openswan/pfkey.h	2016-10-14 17:50:41.905353052 -0700
+diff -Nur --no-dereference a/linux/include/openswan/pfkey.h openswan-2.6.51.3/linux/include/openswan/pfkey.h
+--- a/linux/include/openswan/pfkey.h	2019-04-04 15:03:46.602418731 -0700
++++ openswan-2.6.51.3/linux/include/openswan/pfkey.h	2019-04-04 15:04:40.758417128 -0700
 @@ -18,6 +18,7 @@
  #define __NET_IPSEC_PF_KEY_H
  
@@ -23,8 +23,16 @@ diff -Nur a/linux/include/openswan/pfkey.h openswan-2.6.41/linux/include/openswa
  #ifdef __KERNEL__
  extern struct proto_ops pfkey_proto_ops;
  typedef struct sock pfkey_sock;
-@@ -159,7 +160,11 @@
- 	struct sock	*sk;
+@@ -154,14 +155,16 @@
+ extern char* satype2name(uint8_t satype);
+ extern char* proto2name(uint8_t proto);
+ 
+-#if 0
+ struct key_opt
+ {
+-  kuid_t   	key_pid;	/* process ID */
++  uint32_t	key_pid;	/* process ID */
+   struct sock	*sk;            /* back pointer to PFKEY socket */
  };
  
 -#define key_pid(sk) ((struct key_opt*)&((sk)->sk_protinfo))->key_pid
@@ -32,13 +40,12 @@ diff -Nur a/linux/include/openswan/pfkey.h openswan-2.6.41/linux/include/openswa
 +# define key_pid(sk) ((struct key_opt*)&((sk)->sk_user_data))->key_pid
 +#else
 +# define key_pid(sk) ((struct key_opt*)&((sk)->sk_protinfo))->key_pid
-+#endif
+ #endif
  
  /* XXX-mcr this is not an alignment, this is because the count is in 64-bit
-  * words.
-diff -Nur a/linux/net/ipsec/ipsec_mast.c openswan-2.6.41/linux/net/ipsec/ipsec_mast.c
---- a/linux/net/ipsec/ipsec_mast.c	2016-10-14 17:43:01.633366679 -0700
-+++ openswan-2.6.41/linux/net/ipsec/ipsec_mast.c	2016-10-14 17:50:01.241354256 -0700
+diff -Nur --no-dereference a/linux/net/ipsec/ipsec_mast.c openswan-2.6.51.3/linux/net/ipsec/ipsec_mast.c
+--- a/linux/net/ipsec/ipsec_mast.c	2019-04-04 15:03:46.598418731 -0700
++++ openswan-2.6.51.3/linux/net/ipsec/ipsec_mast.c	2019-04-04 15:04:05.726418165 -0700
 @@ -108,7 +108,13 @@
  static inline int ipsec_mast_xmit2(struct sk_buff *skb)
  {
@@ -54,9 +61,9 @@ diff -Nur a/linux/net/ipsec/ipsec_mast.c openswan-2.6.41/linux/net/ipsec/ipsec_m
  #else
  	return ip_send(skb);
  #endif
-diff -Nur a/linux/net/ipsec/ipsec_tunnel.c openswan-2.6.41/linux/net/ipsec/ipsec_tunnel.c
---- a/linux/net/ipsec/ipsec_tunnel.c	2016-10-14 17:43:01.629366679 -0700
-+++ openswan-2.6.41/linux/net/ipsec/ipsec_tunnel.c	2016-10-14 17:50:01.241354256 -0700
+diff -Nur --no-dereference a/linux/net/ipsec/ipsec_tunnel.c openswan-2.6.51.3/linux/net/ipsec/ipsec_tunnel.c
+--- a/linux/net/ipsec/ipsec_tunnel.c	2019-04-04 15:03:46.598418731 -0700
++++ openswan-2.6.51.3/linux/net/ipsec/ipsec_tunnel.c	2019-04-04 15:04:05.730418165 -0700
 @@ -147,7 +147,13 @@
  {
  
@@ -71,9 +78,9 @@ diff -Nur a/linux/net/ipsec/ipsec_tunnel.c openswan-2.6.41/linux/net/ipsec/ipsec
  #else
  	return ip_send(skb);
  #endif
-diff -Nur a/linux/net/ipsec/ipsec_xmit.c openswan-2.6.41/linux/net/ipsec/ipsec_xmit.c
---- a/linux/net/ipsec/ipsec_xmit.c	2016-10-14 17:43:01.633366679 -0700
-+++ openswan-2.6.41/linux/net/ipsec/ipsec_xmit.c	2016-10-14 17:50:01.241354256 -0700
+diff -Nur --no-dereference a/linux/net/ipsec/ipsec_xmit.c openswan-2.6.51.3/linux/net/ipsec/ipsec_xmit.c
+--- a/linux/net/ipsec/ipsec_xmit.c	2019-04-04 15:03:46.598418731 -0700
++++ openswan-2.6.51.3/linux/net/ipsec/ipsec_xmit.c	2019-04-04 15:04:05.730418165 -0700
 @@ -2366,10 +2366,20 @@
  	}
  }
@@ -139,9 +146,9 @@ diff -Nur a/linux/net/ipsec/ipsec_xmit.c openswan-2.6.41/linux/net/ipsec/ipsec_x
  					ixs->route ? ipsec_route_dst(ixs->route).dev : skb_dst(ixs->skb)->dev,
  					ipsec_xmit_send2);
  
-diff -Nur a/linux/net/ipsec/pfkey_v2.c openswan-2.6.41/linux/net/ipsec/pfkey_v2.c
---- a/linux/net/ipsec/pfkey_v2.c	2016-10-14 17:43:01.629366679 -0700
-+++ openswan-2.6.41/linux/net/ipsec/pfkey_v2.c	2016-10-14 17:50:01.241354256 -0700
+diff -Nur --no-dereference a/linux/net/ipsec/pfkey_v2.c openswan-2.6.51.3/linux/net/ipsec/pfkey_v2.c
+--- a/linux/net/ipsec/pfkey_v2.c	2019-04-04 15:03:46.598418731 -0700
++++ openswan-2.6.51.3/linux/net/ipsec/pfkey_v2.c	2019-04-04 15:04:05.730418165 -0700
 @@ -106,7 +106,7 @@
  
  int pfkey_msg_interp(struct sock *, struct sadb_msg *);
@@ -151,7 +158,7 @@ diff -Nur a/linux/net/ipsec/pfkey_v2.c openswan-2.6.41/linux/net/ipsec/pfkey_v2.
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38)
  DEBUG_NO_STATIC int pfkey_create(struct net *net, struct socket *sock, int protocol, int kern);
  #else
-@@ -675,8 +675,7 @@
+@@ -670,8 +670,7 @@
  	return error;
  }
  
@@ -161,7 +168,7 @@ diff -Nur a/linux/net/ipsec/pfkey_v2.c openswan-2.6.41/linux/net/ipsec/pfkey_v2.
  static struct proto key_proto = {
  	.name	  = "KEY",
  	.owner	  = THIS_MODULE,
-@@ -684,7 +683,7 @@
+@@ -679,7 +678,7 @@
  
  };
  #endif
@@ -170,7 +177,7 @@ diff -Nur a/linux/net/ipsec/pfkey_v2.c openswan-2.6.41/linux/net/ipsec/pfkey_v2.
  DEBUG_NO_STATIC int
  pfkey_create(struct net *net, struct socket *sock, int protocol
  #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38)
-@@ -748,6 +747,10 @@
+@@ -743,6 +742,10 @@
  	KLIPS_INC_USE;
  
  #ifdef NET_26
@@ -181,7 +188,7 @@ diff -Nur a/linux/net/ipsec/pfkey_v2.c openswan-2.6.41/linux/net/ipsec/pfkey_v2.
  #ifdef NET_26_24_SKALLOC
         sk=(struct sock *)sk_alloc(net, PF_KEY, GFP_KERNEL, &key_proto);
  #else
-@@ -757,6 +760,7 @@
+@@ -752,6 +755,7 @@
  	sk=(struct sock *)sk_alloc(PF_KEY, GFP_KERNEL, 1, NULL);
  #endif
  #endif
