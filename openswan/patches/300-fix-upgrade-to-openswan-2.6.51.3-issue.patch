@@ -9,18 +9,6 @@ diff -Nur a/programs/pluto/ikev2.c openswan-2.6.51.3/programs/pluto/ikev2.c
  	break;
  
      case RESPONDER:
-diff -Nur a/programs/pluto/ikev2_parent_I2.c openswan-2.6.51.3/programs/pluto/ikev2_parent_I2.c
---- a/programs/pluto/ikev2_parent_I2.c	2019-07-22 11:21:11.561298403 -0700
-+++ openswan-2.6.51.3/programs/pluto/ikev2_parent_I2.c	2019-07-22 11:22:39.688694339 -0700
-@@ -249,7 +249,7 @@
-     st = duplicate_state(pst);
-     st->st_policy = pst->st_connection->policy & POLICY_IPSEC_MASK;
- 
--    st->st_msgid = mid;
-+    st->st_msgid = htonl(mid);
-     insert_state(st);
-     md->st = st;
-     md->pst= pst;
 diff -Nur a/programs/pluto/kernel.c openswan-2.6.51.3/programs/pluto/kernel.c
 --- a/programs/pluto/kernel.c	2019-07-22 11:21:11.557298431 -0700
 +++ openswan-2.6.51.3/programs/pluto/kernel.c	2019-07-22 11:21:36.633126792 -0700
