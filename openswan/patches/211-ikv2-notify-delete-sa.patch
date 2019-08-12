@@ -1,27 +1,27 @@
-diff -Nur a/programs/pluto/ikev2_parent.c openswan-2.6.41/programs/pluto/ikev2_parent.c
---- a/programs/pluto/ikev2_parent.c	2015-09-17 14:29:42.430564231 -0700
-+++ openswan-2.6.41/programs/pluto/ikev2_parent.c	2015-09-17 14:31:31.138566968 -0700
-@@ -3115,13 +3115,14 @@
+diff -Nur a/programs/pluto/ikev2_parent.c openswan-2.6.51.3/programs/pluto/ikev2_parent.c
+--- a/programs/pluto/ikev2_parent.c	2019-04-04 14:09:50.798514527 -0700
++++ openswan-2.6.51.3/programs/pluto/ikev2_parent.c	2019-04-04 14:10:53.782512662 -0700
+@@ -699,13 +699,13 @@
+     zero(&e_pbs);
+     zero(&e_pbs_cipher);
  
-         md.st = st;
-         md.pst= pst;
--        /* beginning of data going out */
--        authstart = reply_stream.cur;
+-    /* beginning of data going out */
+-    authstart = reply_stream.cur;
+-
+     /* make sure HDR is at start of a clean buffer */
+     zero(reply_buffer);
+     init_pbs(&reply_stream, reply_buffer, sizeof(reply_buffer), "enc notification msg");
  
-         /* make sure HDR is at start of a clean buffer */
-         zero(reply_buffer);
-         init_pbs(&reply_stream, reply_buffer, sizeof(reply_buffer), "information exchange request packet");
- 
-+	/* beginning of data going out */
-+        authstart = reply_stream.cur;
++    /* beginning of data going out */
++    authstart = reply_stream.cur;
 +
-         /* HDR out */
-         {
-             struct isakmp_hdr r_hdr ;
-diff -Nur a/programs/pluto/state.c openswan-2.6.41/programs/pluto/state.c
---- a/programs/pluto/state.c	2015-09-17 14:29:42.434564231 -0700
-+++ openswan-2.6.41/programs/pluto/state.c	2015-09-17 14:32:48.966568928 -0700
-@@ -426,7 +426,8 @@
+     openswan_log("sending encrypted notification %s/%s to %s:%u"
+                  , enum_name(&exchange_names, xchg_type)
+                  , enum_name(&ikev2_notify_names, ntf_type)
+diff -Nur a/programs/pluto/state.c openswan-2.6.51.3/programs/pluto/state.c
+--- a/programs/pluto/state.c	2019-04-04 14:09:50.802514526 -0700
++++ openswan-2.6.51.3/programs/pluto/state.c	2019-04-04 14:11:55.870510824 -0700
+@@ -539,7 +539,8 @@
  
      /* tell the other side of any IPSEC SAs that are going down */
      if (IS_IPSEC_SA_ESTABLISHED(st->st_state)
