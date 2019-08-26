@@ -49,6 +49,22 @@ get_switch_config_auto(){
 	board=$(ipq806x_board_name)
 
 	case "$board" in
+	ap13*|ap143|ap147|ap15*)
+	#MIPS platform S17
+		echo "=qca eth1 eth1 1 port1"
+		echo "=qca eth1 eth1 2 port2"
+		echo "=qca eth1 eth1 3 port3"
+		echo "=qca eth1 eth1 4 port4"
+		echo "=qca eth1 eth0 5 eth0"
+		;;
+	#Below is for ARM
+	ap145|ap148)
+		echo "=qca eth1 eth1 1 port1"
+		echo "=qca eth1 eth1 2 port2"
+		echo "=qca eth1 eth1 3 port3"
+		echo "=qca eth1 eth1 4 port4"
+		echo "=qca eth1 eth0 5 eth0"
+		;;
 	ap160|ap161)
 		echo "=qca eth1 eth1 1 port1"
 		echo "=qca eth1 eth1 2 port2"
@@ -62,14 +78,7 @@ get_switch_config_auto(){
 		echo "=qca eth1 eth1 4 port4"
 		echo "=qca eth0 eth0 5 eth0"
 		;;
-	ap-hk*|ap-ac*|ap-cp*)
-		;;
 	*)
-		echo "=qca eth1 eth1 1 port1"
-		echo "=qca eth1 eth1 2 port2"
-		echo "=qca eth1 eth1 3 port3"
-		echo "=qca eth1 eth1 4 port4"
-		echo "=qca eth1 eth0 5 eth0"
 		;;
 	esac
 }
