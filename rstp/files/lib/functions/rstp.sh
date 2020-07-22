@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright (c) 2013, 2017, 2019 The Linux Foundation. All rights reserved.
+# Copyright (c) 2013, 2017, 2019, 2020 The Linux Foundation. All rights reserved.
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -25,8 +25,7 @@ get_atheros_header_type(){
 }
 
 get_cpu_mirror_port(){
-	. /lib/ipq806x.sh
-	board=$(ipq806x_board_name)
+	board=$(cat /tmp/sysinfo/board_name)
 
 	case "$board" in
 	ap-dk*)
@@ -45,8 +44,7 @@ get_cpu_mirror_port(){
 }
 
 get_switch_config_auto(){
-	. /lib/ipq806x.sh
-	board=$(ipq806x_board_name)
+	board=$(cat /tmp/sysinfo/board_name)
 
 	case "$board" in
 	ap13*|ap143|ap147|ap15*)
