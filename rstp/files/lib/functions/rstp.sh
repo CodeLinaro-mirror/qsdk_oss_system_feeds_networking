@@ -43,6 +43,19 @@ get_cpu_mirror_port(){
 	esac
 }
 
+get_switch_id(){
+	board=$(cat /tmp/sysinfo/board_name)
+
+	case "$board" in
+	ap-mp03.1)
+		echo 0x1
+		;;
+	*)
+		echo 0x0
+		;;
+	esac
+}
+
 get_switch_config_auto(){
 	board=$(cat /tmp/sysinfo/board_name)
 
@@ -62,6 +75,12 @@ get_switch_config_auto(){
 		echo "=qca eth1 eth1 3 port3"
 		echo "=qca eth1 eth1 4 port4"
 		echo "=qca eth1 eth0 5 eth0"
+		;;
+	ap-mp03.1)
+		echo "=qca eth1 eth1 1 port1"
+		echo "=qca eth1 eth1 2 port2"
+		echo "=qca eth1 eth1 3 port3"
+		echo "=qca eth1 eth1 4 port4"
 		;;
 	ap160|ap161)
 		echo "=qca eth1 eth1 1 port1"
