@@ -24,11 +24,16 @@ include $(INCLUDE_DIR)/cmake.mk
 
 PKG_BUILD_DEPENDS += qca-ssdk
 
+SSDK_NOHNAT:=PACKAGE_kmod-qca-ssdk-nohnat
+SSDK_HNAT:=PACKAGE_kmod-qca-ssdk-hnat
+
+SSDK_PKGS:=$(SSDK_NOHNAT)||$(SSDK_HNAT)
+
 define Package/lacpd
   SECTION:=net
   CATEGORY:=Network
   MAINTAINER:=Xiaoping Fan <xfan@codeaurora.org>
-  DEPENDS:=+libubox +libuci +libubus +ubus +ubusd +!PACKAGE_kmod-qca-ssdk-nohnat:kmod-qca-ssdk-hnat
+  DEPENDS:=+libubox +libuci +libubus +ubus +ubusd @$(SSDK_PKGS)
   TITLE:=Link aggregation control protocol Daemon
 endef
 
