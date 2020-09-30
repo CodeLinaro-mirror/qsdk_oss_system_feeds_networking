@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 2013, 2018 The Linux Foundation. All rights reserved.
+# Copyright (c) 2013, 2018, 2020 The Linux Foundation. All rights reserved.
 BRIFNAME=
 
 rstpctl_bridge_list() {
@@ -17,10 +17,7 @@ rstpctl_bridge_list() {
 
 }
 
-[ "$ACTION" = "ifup" ] && {
-	. /lib/functions.sh
-	. /lib/functions/network.sh
-
+rstpctl_bridge_device_enable() {
 	local ifname
 	local enabled
 	local autoMode
@@ -47,4 +44,13 @@ rstpctl_bridge_list() {
 			fi
 		}
 	}
+
+}
+
+[ "$ACTION" = "ifup" ] && {
+	. /lib/functions.sh
+	. /lib/functions/network.sh
+
+	rstpctl_bridge_device_enable
+
 }
