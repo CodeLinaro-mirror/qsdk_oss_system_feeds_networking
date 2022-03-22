@@ -183,15 +183,14 @@ board_recover() {
 __brctl_stp_on_or_off() {
 	local config="$1"
 	local on_or_off="$2"
-	local type br_device br_ifname
+	local type br
 
 	config_get type "$config" type
 	[ -z "$type" -o ! "$type" = "bridge" ] && return
 
-	br_device="$config"
-	network_get_device br_ifname $br_device
+	network_get_physdev br $1
 
-	brctl stp $br_ifname $on_or_off
+	brctl stp $br $on_or_off
 	sleep 1
 }
 
@@ -203,6 +202,12 @@ brctl_stp_on_or_off() {
 
 start() {
 	local rstp_enable autoMode ifname
+
+	force_link=$(uci -q get network.lan.force_link)
+	[ "$force_link" != "1" ] && {
+		uci set network.lan.force_link=1
+		uci commit network
+	}
 
 	config_load "rstp"
 
