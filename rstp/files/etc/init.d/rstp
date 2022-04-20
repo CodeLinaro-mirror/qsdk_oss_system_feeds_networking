@@ -190,8 +190,20 @@ __brctl_stp_on_or_off() {
 
 	network_get_physdev br $1
 
-	brctl stp $br $on_or_off
-	sleep 1
+        brctl stp $br $on_or_off
+        sleep 1
+
+        #sanity check rstp while rstpd is starting
+        #In case where kernel stop & start rstpd during init, results with RSTP (802.1w)
+        #being disabled in server and STP (802.1d) will be enabled by default
+        #even if rstpd is running
+        err=`rstpctl showbridge $br | cut -d' ' -f 6`
+        [ "$err" = '1002' ] && {  #Err_Bridge_RSTP_not_enabled
+            sleep 1 #wait time to connect to server
+            echo "enabling rstp for $br as err:$err" > /dev/console
+            brctl stp $br $on_or_off; sleep 1
+            /sbin/rstpctl rstp $br $on_or_off
+        }
 }
 
 brctl_stp_on_or_off() {
