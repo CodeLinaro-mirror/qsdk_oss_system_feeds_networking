@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # Copyright (c) 2013, 2017, 2019-2020 The Linux Foundation. All rights reserved.
+# Copyright (c) 2023. Qualcomm Innovation Center, Inc. All rights reserved.
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -25,7 +26,7 @@ get_atheros_header_type(){
 }
 
 get_cpu_mirror_port(){
-	board=$(cat /tmp/sysinfo/board_name)
+	board=ap$(cat /tmp/sysinfo/board_name | awk -F 'ap' '{print $2}')
 
 	case "$board" in
 	ap-dk*)
@@ -44,7 +45,7 @@ get_cpu_mirror_port(){
 }
 
 get_switch_id(){
-	board=$(cat /tmp/sysinfo/board_name)
+	board=ap$(cat /tmp/sysinfo/board_name | awk -F 'ap' '{print $2}')
 
 	case "$board" in
 	ap-mp03.1)
@@ -57,7 +58,7 @@ get_switch_id(){
 }
 
 get_switch_config_auto(){
-	board=$(cat /tmp/sysinfo/board_name)
+	board=ap$(cat /tmp/sysinfo/board_name | awk -F 'ap' '{print $2}')
 
 	case "$board" in
 	ap13*|ap143|ap147|ap15*)
