@@ -48,7 +48,7 @@ get_switch_id(){
 	board=ap$(cat /tmp/sysinfo/board_name | awk -F 'ap' '{print $2}')
 
 	case "$board" in
-	ap-mp03.1)
+	ap-mp03.1|ap-mi01*|ap-mi04*)
 		echo 0x1
 		;;
 	*)
@@ -77,7 +77,7 @@ get_switch_config_auto(){
 		echo "=qca eth1 eth1 4 port4"
 		echo "=qca eth1 eth0 5 eth0"
 		;;
-	ap-mp03.1)
+	ap-mp03.1|ap-mi01*|ap-mi04*)
 		echo "=qca eth1 eth1 1 port1"
 		echo "=qca eth1 eth1 2 port2"
 		echo "=qca eth1 eth1 3 port3"
