@@ -211,7 +211,7 @@ __brctl_stp_on_or_off() {
 brctl_stp_on_or_off() {
 	. /lib/functions/network.sh
 	config_load network
-	config_foreach __brctl_stp_on_or_off interface $1
+	config_foreach __brctl_stp_on_or_off device $1
 }
 
 start() {
