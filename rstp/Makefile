@@ -9,6 +9,7 @@ PKG_SOURCE_URL:=git://git.kernel.org/pub/scm/linux/kernel/git/shemminger/rstp.gi
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE_VERSION:=434d24bae108dbb21461a13a4abcf014afa8b029
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
+PKG_SOURCE_SUBMODULES:=skip
 PKG_MAINTAINER:=Stephen Hemminger <shemminger@vyatta.com>
 # PKG_MIRROR_MD5SUM:=
 # CMAKE_INSTALL:=1
