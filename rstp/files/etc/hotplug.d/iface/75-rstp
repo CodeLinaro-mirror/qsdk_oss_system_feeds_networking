@@ -1,5 +1,7 @@
 #!/bin/sh
 # Copyright (c) 2013, 2018, 2020 The Linux Foundation. All rights reserved.
+. /lib/functions.sh
+. /lib/functions/network.sh
 BRIFNAME=
 
 rstpctl_bridge_list() {
@@ -31,14 +33,14 @@ rstpctl_bridge_device_enable() {
 				network_get_device lanifname lan
 				if [ "$lanifname" = "$ifname" ]; then
 					sleep 1
-					/etc/init.d/rstp restart
+					/etc/init.d/rstp start
 				fi
 			else
 				config_foreach rstpctl_bridge_list bridge
 				for brname in $BRIFNAME
 				do
 					if [ $ifname = $brname ]; then
-						/etc/init.d/rstp restart
+						/etc/init.d/rstp start
 					fi
 				done
 			fi
@@ -47,10 +49,6 @@ rstpctl_bridge_device_enable() {
 
 }
 
-[ "$ACTION" = "ifup" ] && {
-	. /lib/functions.sh
-	. /lib/functions/network.sh
-
+/etc/init.d/rstp enabled && [ "$ACTION" = "ifup" ] && {
 	rstpctl_bridge_device_enable
-
 }
