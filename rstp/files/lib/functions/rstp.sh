@@ -17,6 +17,35 @@
 
 . /lib/functions.sh
 
+switch_device=""
+switch_device_id="0"
+switch_cpu_root_port="6"
+switch_ports=""
+
+rstp_cfg_switch_init() {
+	. /usr/share/libubox/jshn.sh
+	json_init
+	json_load "$(cat /sys/ssdk/eth_switch 2>/dev/null)" >/dev/null 2>&1
+	if json_is_a switches array
+	then
+	 json_select switches
+	 idx=1
+	 while json_is_a $idx object
+	 do
+		json_select $idx
+		json_get_var connected switch_connected
+		if [ "$connected" = "yes" ];then
+			json_get_var switch_device name
+			json_get_var switch_device_id switch_device_id
+			json_get_var switch_cpu_root_port switch_cpu_port
+			json_get_var switch_ports switch_ports
+		fi
+		json_select ..
+		idx=$((idx+1))
+	 done
+	fi
+}
+
 get_linkstatus_check_interval(){
 	echo 3
 }
@@ -26,6 +55,8 @@ get_atheros_header_type(){
 }
 
 get_cpu_mirror_port(){
+	rstp_cfg_switch_init
+
 	board=ap$(cat /tmp/sysinfo/board_name | awk -F 'ap' '{print $2}')
 
 	case "$board" in
@@ -35,16 +66,23 @@ get_cpu_mirror_port(){
 		#attributes means nothing if cpu_port or mirror_port is less than 0
 		echo "0:1 -1:1"
 		;;
+	ap-mp03.1|ap-mi01*|ap-mi04*)
+		echo "0:0 6:0"
+		;;
 	*)
 		#format: "cpu_port:<attribute 1> mirror_port:<attribute 1>"
 		#<attribute 1>: is Atheros header inserted by driver?
 		#attributes means nothing if cpu_port or mirror_port is less than 0
-		echo "0:0 6:0"
+		if [ -n $switch_device ]; then
+			echo "$switch_cpu_root_port:0 -1:0"
+		fi
 		;;
 	esac
 }
 
 get_switch_id(){
+	rstp_cfg_switch_init
+
 	board=ap$(cat /tmp/sysinfo/board_name | awk -F 'ap' '{print $2}')
 
 	case "$board" in
@@ -52,7 +90,11 @@ get_switch_id(){
 		echo 0x1
 		;;
 	*)
-		echo 0x0
+		if [ -n $switch_device ]; then
+			echo "0x$switch_device_id"
+		else
+			echo 0x0
+		fi
 		;;
 	esac
 }
@@ -97,6 +139,12 @@ get_switch_config_auto(){
 		echo "=qca eth0 eth0 5 eth0"
 		;;
 	*)
+		if [ -n $switch_device ]; then
+			for port in ${switch_ports//,/ }
+			do
+			echo "=qca $switch_device $switch_device $port port$port"
+			done
+		fi
 		;;
 	esac
 }
@@ -132,6 +180,7 @@ get_switch_config_manual(){
 get_switch_ports(){
 	local autoMode
 
+	rstp_cfg_switch_init
 	config_load "rstp"
 
 	config_get autoMode global autoMode
