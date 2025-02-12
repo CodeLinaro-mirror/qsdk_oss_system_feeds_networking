@@ -21,6 +21,7 @@ switch_device=""
 switch_device_id="0"
 switch_cpu_root_port="6"
 switch_ports=""
+switch_mode=""
 
 rstp_cfg_switch_init() {
 	. /usr/share/libubox/jshn.sh
@@ -36,6 +37,7 @@ rstp_cfg_switch_init() {
 		json_get_var connected switch_connected
 		if [ "$connected" = "yes" ];then
 			json_get_var switch_device name
+			[ -e /sys/class/net/${switch_device}/dsa/tagging ] && switch_mode="dsa"
 			json_get_var switch_device_id switch_device_id
 			json_get_var switch_cpu_root_port switch_cpu_port
 			json_get_var switch_ports switch_ports
@@ -80,6 +82,11 @@ get_cpu_mirror_port(){
 	esac
 }
 
+get_switch_mode(){
+	rstp_cfg_switch_init
+	echo "$switch_mode"
+}
+
 get_switch_id(){
 	rstp_cfg_switch_init
 
@@ -101,6 +108,8 @@ get_switch_id(){
 
 get_switch_config_auto(){
 	board=ap$(cat /tmp/sysinfo/board_name | awk -F 'ap' '{print $2}')
+
+	[ "$switch_mode" = "dsa" ] && return
 
 	case "$board" in
 	ap13*|ap143|ap147|ap15*)
