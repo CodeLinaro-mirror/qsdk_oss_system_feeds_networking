@@ -100,7 +100,7 @@ mcproxy_handle_behaviour() {
 	fi
 
 	local rule_table
-	if [ ! -z $rulematching ]; then
+	if [ ! -z "$rulematching" ]; then
 		rule_table="rulematching $rulematching"
 	elif [ ! -z $table ]; then
 		local whitelist
